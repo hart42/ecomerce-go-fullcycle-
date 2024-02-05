@@ -31,3 +31,11 @@ func (cd *CategoryDB) GetCategories() ([]*entity.Category, error) {
 	}
 	return categories, nil
 }
+
+func (cd *CategoryDB) CreateCategory(category *entity.Category) (string, error) {
+	_, err := cd.db.Exec("INSERT INTO categories (id, name) VAlUES (?, ?)", category.ID, category.Name)
+	if err != nil {
+		return "", err
+	}
+	return category.ID, nil
+}
