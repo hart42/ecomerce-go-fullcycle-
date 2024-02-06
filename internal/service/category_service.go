@@ -20,3 +20,12 @@ func (cs *CategoryService) GetCategories() ([]*entity.Category, error) {
 	}
 	return categories, nil
 }
+
+func (cs *CategoryService) CreateCategory(name string) (*entity.Category, error) {
+	category := entity.NewCategory(name)
+	_, err := cs.CategoryDB.CreateCategory(category)
+	if err != nil {
+		return nil, err
+	}
+	return category, nil
+}
