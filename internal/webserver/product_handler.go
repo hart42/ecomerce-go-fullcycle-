@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/hart42/ecomerce-go-fullcycle-/internal/entity"
 	"github.com/hart42/ecomerce-go-fullcycle-/internal/service"
 )
 
@@ -51,4 +52,19 @@ func (wph *WebProductHandler) GetProductByCategoryID(w http.ResponseWriter, r *h
 		return
 	}
 	json.NewEncoder(w).Encode(products)
+}
+
+func (wph *WebProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
+	var product entity.Product
+	err := json.NewDecoder(r.Body).Decode(&product)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	result, err := wph.ProductService.CreateProduct(product.Name, product.Description, product.CategoryID, product.ImageURL, product.Price)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(result)
 }
