@@ -41,3 +41,21 @@ func (pd *ProductDB) GetProduct(id string) (*entity.Product, error) {
 	}
 	return &product, nil
 }
+
+func (pd *ProductDB) GetProductByCategoryID(categoryID string) ([]*entity.Product, error) {
+	rows, err := pd.db.Query("SELECT id, name, description, price, category_id, image_url FROM products WHERE category_id = ?", categoryID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var products []*entity.Product
+	for rows.Next() {
+		var product entity.Product
+		if err := rows.Scan(&product.ID, &product.Name, &product.Description, &product.Price, &product.CategoryID, &product.ImageURL); err != nil {
+			return nil, err
+		}
+		products = append(products, &product)
+	}
+	return products, nil
+}
