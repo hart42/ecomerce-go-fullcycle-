@@ -38,3 +38,17 @@ func (wph *WebProductHandler) GetProduct(w http.ResponseWriter, r *http.Request)
 	}
 	json.NewEncoder(w).Encode(product)
 }
+
+func (wph *WebProductHandler) GetProductByCategoryID(w http.ResponseWriter, r *http.Request) {
+	categoryID := chi.URLParam(r, "categoryID")
+	if categoryID == "" {
+		http.Error(w, "categoryID is required", http.StatusBadRequest)
+		return
+	}
+	products, err := wph.ProductService.GetProductByCategoryID(categoryID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(products)
+}
