@@ -32,7 +32,7 @@ func (wch *WebCategoryHandler) GetCategory(w http.ResponseWriter, r *http.Reques
 		http.Error(w, "id is required", http.StatusBadRequest)
 		return
 	}
-	categories, err := wch.CategoryService.CreateCategory(id)
+	categories, err := wch.CategoryService.GetCategory(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
